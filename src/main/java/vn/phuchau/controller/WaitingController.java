@@ -11,6 +11,11 @@ import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/waiting")
 public class WaitingController extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// Kiểm tra session có tồn tại

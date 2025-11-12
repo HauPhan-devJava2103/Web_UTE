@@ -35,4 +35,55 @@ public class UserDaoImpl implements UserDao {
 		return null;
 	}
 
+	@Override
+	public void insert(User user) {
+		String sql = "INSERT INTO `User`(username,email,password) VALUES (?,?,?)";
+		try {
+			conn = new DBMySQLConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, user.getUsername());
+			ps.setString(2, user.getEmail());
+			ps.setString(3, user.getPassword());
+
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public boolean checkExistEmail(String email) {
+		String query = "SELECT 1 FROM `User` WHERE email = ? LIMIT 1";
+
+		try (Connection conn = new DBMySQLConnect().getConnection();
+				PreparedStatement ps = conn.prepareStatement(query)) {
+
+			ps.setString(1, email);
+			try (ResultSet rs = ps.executeQuery()) {
+				return rs.next();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean checkExistUsername(String username) {
+
+		String query = "SELECT 1 FROM `User` WHERE username = ? LIMIT 1";
+
+		try (Connection conn = new DBMySQLConnect().getConnection();
+				PreparedStatement ps = conn.prepareStatement(query)) {
+
+			ps.setString(1, username);
+			try (ResultSet rs = ps.executeQuery()) {
+				return rs.next();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 }

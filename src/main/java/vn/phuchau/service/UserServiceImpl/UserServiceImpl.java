@@ -23,4 +23,30 @@ public class UserServiceImpl implements UserService {
 		return userDao.get(username);
 	}
 
+	@Override
+	public void insert(User user) {
+		userDao.insert(user);
+
+	}
+
+	@Override
+	public boolean register(String username, String email, String password) {
+		if (userDao.checkExistEmail(email) || userDao.checkExistEmail(username)) {
+			return false;
+		}
+		userDao.insert(new User(username, email, password));
+		return true;
+
+	}
+
+	@Override
+	public boolean checkExistEmail(String email) {
+		return userDao.checkExistEmail(email);
+	}
+
+	@Override
+	public boolean checkExistUsername(String username) {
+		return userDao.checkExistUsername(username);
+	}
+
 }
