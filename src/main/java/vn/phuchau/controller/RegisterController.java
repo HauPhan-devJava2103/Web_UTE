@@ -18,13 +18,13 @@ public class RegisterController extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String REGISTER = "/register.jsp";
-	public static final String LOGIN = "/login.jsp";
+	public static final String REGISTER = "/views/register.jsp";
+	public static final String LOGIN = "/views/login.jsp";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		RequestDispatcher rd = req.getRequestDispatcher("/register.jsp");
+		RequestDispatcher rd = req.getRequestDispatcher(REGISTER);
 		rd.forward(req, resp);
 
 	}

@@ -86,4 +86,18 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 
+	@Override
+	public boolean updatePassword(String email, String newPassword) {
+		String sql = "UPDATE `User` SET password = ? WHERE email = ?";
+		try (Connection conn = new DBMySQLConnect().getConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, newPassword);
+			ps.setString(2, email);
+			return ps.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 }

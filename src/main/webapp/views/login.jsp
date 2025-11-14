@@ -35,10 +35,15 @@
 
 			<button type="submit" class="btn btn-primary">Đăng nhập</button>
 
+			<div class="text-center mt-3">
+				<a href="${pageContext.request.contextPath}/forgot-password"
+					class="text-decoration-none text-muted"> Quên mật khẩu? </a>
+			</div>
+
 			<div class="text-center">
 				<p class="mb-0">
-					Chưa có tài khoản?
-					<a href="${pageContext.request.contextPath}/register"
+					Chưa có tài khoản? <a
+						href="${pageContext.request.contextPath}/register"
 						class="text-decoration-none fw-medium"> Đăng ký ngay </a>
 				</p>
 			</div>

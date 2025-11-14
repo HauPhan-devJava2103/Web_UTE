@@ -10,4 +10,6 @@ public interface UserDao {
 	boolean checkExistEmail(String email);
 
 	boolean checkExistUsername(String username);
+
+	boolean updatePassword(String email, String password);
 }

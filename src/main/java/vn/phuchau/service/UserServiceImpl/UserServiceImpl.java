@@ -49,4 +49,9 @@ public class UserServiceImpl implements UserService {
 		return userDao.checkExistUsername(username);
 	}
 
+	@Override
+	public boolean updatePassword(String email, String password) {
+		return this.userDao.updatePassword(email, password);
+	}
+
 }
