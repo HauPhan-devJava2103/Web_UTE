@@ -11,17 +11,14 @@ import vn.phuchau.dao.CategoryDao;
 import vn.phuchau.modal.Category;
 
 public class CategoryDaoImpl implements CategoryDao {
-	public Connection conn = null;
-	public PreparedStatement ps = null;
 	public ResultSet rs = null;
 
 	@Override
 	public void insert(Category category) {
-		String sql = "INSERT INTO category (name,images) VALUES (?,?)";
+		String sql = "INSERT INTO Category (name,images) VALUES (?,?)";
 
-		try {
-			conn = new DBMySQLConnect().getConnection();
-			ps = conn.prepareStatement(sql);
+		try (Connection conn = new DBMySQLConnect().getConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, category.getName());
 			ps.setString(2, category.getImages());
 
@@ -34,11 +31,9 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public void edit(Category category) {
-		String sql = "UPDATE category SET name = ?, images = ? WHERE id = ?";
-		try {
-			conn = new DBMySQLConnect().getConnection();
-			ps = conn.prepareStatement(sql);
-
+		String sql = "UPDATE Category SET name = ?, images = ? WHERE id = ?";
+		try (Connection conn = new DBMySQLConnect().getConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, category.getName());
 			ps.setString(2, category.getImages());
 			ps.setInt(3, category.getId());
@@ -51,9 +46,9 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public void delete(int id) {
-		String sql = "DELETE FROM category WHERE id = ?";
-		try {
-			conn = new DBMySQLConnect().getConnection();
+		String sql = "DELETE FROM Category WHERE id = ?";
+		try (Connection conn = new DBMySQLConnect().getConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setInt(1, id);
 			ps.executeUpdate();
 
@@ -65,7 +60,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public Category get(int id) {
-		String sql = "SELECT id, name, images FROM category WHERE id = ?";
+		String sql = "SELECT id, name, images FROM Category WHERE id = ?";
 
 		try (Connection conn = new DBMySQLConnect().getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -92,11 +87,10 @@ public class CategoryDaoImpl implements CategoryDao {
 	@Override
 	public List<Category> getAll() {
 		List<Category> categories = new ArrayList<>();
-		String sql = "SELECT * FROM category";
+		String sql = "SELECT * FROM Category";
 
-		try {
-			conn = new DBMySQLConnect().getConnection();
-			ps = conn.prepareStatement(sql);
+		try (Connection conn = new DBMySQLConnect().getConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)) {
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					Category category = new Category();
@@ -122,7 +116,7 @@ public class CategoryDaoImpl implements CategoryDao {
 			return categories;
 		}
 
-		String sql = "SELECT id, name, images FROM category WHERE name LIKE ?";
+		String sql = "SELECT id, name, images FROM Category WHERE name LIKE ?";
 
 		try (Connection conn = new DBMySQLConnect().getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
