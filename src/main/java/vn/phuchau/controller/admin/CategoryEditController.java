@@ -18,7 +18,10 @@ import vn.phuchau.service.UserServiceImpl.CategoryServiceImpl;
 import vn.phuchau.utils.Constant;
 
 @WebServlet("/admin/category/edit")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 50)
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1MB
+		maxFileSize = 1024 * 1024 * 10, // 10MB
+		maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 public class CategoryEditController extends HttpServlet {
 
 	/**
@@ -31,7 +34,7 @@ public class CategoryEditController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int id = Integer.parseInt(req.getParameter("id"));
 
-		Category category = categoryService.get(id);
+		Category category = categoryService.findById(id);
 		req.setAttribute("category", category);
 
 		RequestDispatcher rd = req.getRequestDispatcher("/views/admin/category-edit.jsp");
@@ -43,6 +46,7 @@ public class CategoryEditController extends HttpServlet {
 		int id = Integer.parseInt(req.getParameter("id"));
 		String name = req.getParameter("name");
 		String oldImage = req.getParameter("oldImage");
+		int status = Integer.parseInt(req.getParameter("status"));
 
 		Part filePart = req.getPart("imageFile");
 		String fileName = oldImage;
@@ -51,20 +55,21 @@ public class CategoryEditController extends HttpServlet {
 
 			fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
-			File uploadDir = new File(Constant.DIR);
+			File uploadDir = new File(Constant.UPLOAD_DIRECTORY);
 			if (!uploadDir.exists()) {
 				uploadDir.mkdirs();
 			}
 
-			filePart.write(Constant.DIR + File.separator + fileName);
+			filePart.write(Constant.UPLOAD_DIRECTORY + File.separator + fileName);
 		}
 
 		Category category = new Category();
 		category.setId(id);
 		category.setName(name);
 		category.setImages(fileName);
+		category.setStatus(status);
 
-		categoryService.edit(category);
+		categoryService.update(category);
 
 		resp.sendRedirect(req.getContextPath() + "/admin/category");
 

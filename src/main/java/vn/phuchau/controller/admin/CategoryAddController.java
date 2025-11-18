@@ -1,5 +1,7 @@
 package vn.phuchau.controller.admin;
 
+import static vn.phuchau.utils.Constant.UPLOAD_DIRECTORY;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -15,10 +17,12 @@ import jakarta.servlet.http.Part;
 import vn.phuchau.modal.Category;
 import vn.phuchau.service.CategoryService;
 import vn.phuchau.service.UserServiceImpl.CategoryServiceImpl;
-import vn.phuchau.utils.Constant;
 
 @WebServlet("/admin/category/add")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 50)
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1MB
+		maxFileSize = 1024 * 1024 * 10, // 10MB
+		maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 public class CategoryAddController extends HttpServlet {
 
 	/**
@@ -39,25 +43,42 @@ public class CategoryAddController extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 
 		String name = req.getParameter("name");
-		Part filePart = req.getPart("imageFile");
 
-		String fileName = null;
-
-		if (filePart != null && filePart.getSize() > 0) {
-
-			fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-
-			File uploadDir = new File(Constant.DIR);
-			if (!uploadDir.exists()) {
-				uploadDir.mkdirs();
-			}
-
-			filePart.write(Constant.DIR + File.separator + fileName);
-		}
+		String statusStr = req.getParameter("status");
+		int status = Integer.parseInt(statusStr);
 
 		Category category = new Category();
 		category.setName(name);
-		category.setImages(fileName);
+		category.setStatus(status);
+
+		String fname = "";
+		String uploadPath = UPLOAD_DIRECTORY;
+		File uploadDir = new File(uploadPath);
+
+		if (!uploadDir.exists()) {
+			uploadDir.mkdir();
+		}
+		try {
+
+			Part part = req.getPart("images");
+			if (part.getSize() > 0) {
+				String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+
+				int index = filename.lastIndexOf(".");
+				String ext = filename.substring(index + 1);
+				fname = System.currentTimeMillis() + "." + ext;
+
+				// upload File
+				part.write(uploadPath + "/" + fname);
+
+				// Ghi DB
+				category.setImages(fname);
+			} else {
+				category.setImages("avata.png");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		categoryService.insert(category);
 		resp.sendRedirect(req.getContextPath() + "/admin/category");

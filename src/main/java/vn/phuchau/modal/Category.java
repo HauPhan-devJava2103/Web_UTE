@@ -11,12 +11,14 @@ public class Category implements Serializable {
 	private int id;
 	private String name;
 	private String images;
+	private int status;
 
-	public Category(int id, String name, String images) {
+	public Category(int id, String name, String images, int status) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.images = images;
+		this.status = status;
 	}
 
 	public Category() {
@@ -47,9 +49,17 @@ public class Category implements Serializable {
 		this.images = images;
 	}
 
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", images=" + images + "]";
+		return "Category [id=" + id + ", name=" + name + ", images=" + images + ", status=" + status + "]";
 	}
 
 }

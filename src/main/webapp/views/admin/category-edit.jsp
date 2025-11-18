@@ -40,6 +40,10 @@
             <input type="file" name="imageFile" />
         </div>
         <br>
+        <select name="status">
+	        <option value="1">Hoạt động</option>
+	        <option value="0">Không hoạt động</option>
+	    </select>
 
         <button type="submit">Cập nhật</button>
         <a href="${pageContext.request.contextPath}/admin/category">Quay lại danh sách</a>

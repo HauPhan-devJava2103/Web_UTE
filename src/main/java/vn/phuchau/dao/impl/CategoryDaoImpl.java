@@ -15,12 +15,13 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public void insert(Category category) {
-		String sql = "INSERT INTO Category (name,images) VALUES (?,?)";
+		String sql = "INSERT INTO Category (name,images,status) VALUES (?,?,?)";
 
 		try (Connection conn = new DBMySQLConnect().getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, category.getName());
 			ps.setString(2, category.getImages());
+			ps.setInt(3, category.getStatus());
 
 			ps.executeUpdate();
 
@@ -30,13 +31,14 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	@Override
-	public void edit(Category category) {
-		String sql = "UPDATE Category SET name = ?, images = ? WHERE id = ?";
+	public void update(Category category) {
+		String sql = "UPDATE Category SET name = ?, images = ?, status = ? WHERE id = ?";
 		try (Connection conn = new DBMySQLConnect().getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, category.getName());
 			ps.setString(2, category.getImages());
-			ps.setInt(3, category.getId());
+			ps.setInt(3, category.getStatus());
+			ps.setInt(4, category.getId());
 
 			ps.executeUpdate();
 		} catch (Exception e) {
@@ -59,8 +61,8 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	@Override
-	public Category get(int id) {
-		String sql = "SELECT id, name, images FROM Category WHERE id = ?";
+	public Category findById(int id) {
+		String sql = "SELECT id, name, images, status FROM Category WHERE id = ?";
 
 		try (Connection conn = new DBMySQLConnect().getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -73,6 +75,7 @@ public class CategoryDaoImpl implements CategoryDao {
 					category.setId(rs.getInt("id"));
 					category.setName(rs.getString("name"));
 					category.setImages(rs.getString("images"));
+					category.setStatus(rs.getInt("status"));
 					return category;
 				}
 			}
@@ -85,7 +88,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	@Override
-	public List<Category> getAll() {
+	public List<Category> findAll() {
 		List<Category> categories = new ArrayList<>();
 		String sql = "SELECT * FROM Category";
 
@@ -97,6 +100,7 @@ public class CategoryDaoImpl implements CategoryDao {
 					category.setId(rs.getInt("id"));
 					category.setName(rs.getString("name"));
 					category.setImages(rs.getString("images"));
+					category.setStatus(rs.getInt("status"));
 					categories.add(category);
 				}
 			}
@@ -109,14 +113,14 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	@Override
-	public List<Category> search(String keyword) {
+	public List<Category> findName(String keyword) {
 		List<Category> categories = new ArrayList<>();
 
 		if (keyword == null || keyword.trim().isEmpty()) {
 			return categories;
 		}
 
-		String sql = "SELECT id, name, images FROM Category WHERE name LIKE ?";
+		String sql = "SELECT id, name, images, status FROM Category WHERE name LIKE ?";
 
 		try (Connection conn = new DBMySQLConnect().getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -129,6 +133,7 @@ public class CategoryDaoImpl implements CategoryDao {
 					category.setId(rs.getInt("id"));
 					category.setName(rs.getString("name"));
 					category.setImages(rs.getString("images"));
+					category.setStatus(rs.getInt("status"));
 					categories.add(category);
 				}
 			}

@@ -33,6 +33,7 @@
 								<th class="text-center" style="width: 80px;">#</th>
 								<th>Tên danh mục</th>
 								<th class="text-center">Ảnh</th>
+								<th>Trạng thái</th>
 								<th class="text-center" style="width: 120px;">Hành động</th>
 							</tr>
 						</thead>
@@ -41,26 +42,41 @@
 								<tr>
 									<td class="text-center fw-medium">${loop.index + 1}</td>
 									<td>${cat.name}</td>
+
 									<td class="text-center"><c:if
-											test="${not empty cat.images}">
-											<img
-												src="${pageContext.request.contextPath}/image?fname=${cat.images}"
-												width="100" height="80" />
+											test="${cat.images.substring(0,5) != 'https'}">
+											<c:url value="/image?fname=${cat.images}" var="imgUrl"></c:url>
+										</c:if> <c:if test="${cat.images.substring(0,5) == 'https'}">
+											<c:url value="${cat.images}" var="imgUrl"></c:url>
+										</c:if> <img src="${imgUrl}" width="100" height="80" /></td>
+									<td><c:if test="${cat.status == 1}">
+											<span>Hoạt động</span>
+										</c:if> <c:if test="${cat.status != 1}">
+											<span>Khóa</span>
 										</c:if></td>
 									<td class="text-center">
-										<div class="btn-group" role="group">
-											<c:url var="editUrl" value="/admin/category/edit">
-												<c:param name="id" value="${cat.id}" />
-											</c:url>
-											<a href="${editUrl}" class="btn btn-sm btn-outline-primary"
+										<c:url var="editUrl" value="/admin/category/edit">
+											<c:param name="id" value="${cat.id}" />
+										</c:url>
+										<c:url var="deleteUrl" value="/admin/category/delete">
+											<c:param name="id" value="${cat.id}" />
+										</c:url>
+
+										<div class="btn-group btn-group-sm" role="group"
+											aria-label="Hành động">
+											<!-- Nút Sửa -->
+											<a href="${editUrl}" class="btn btn-outline-primary"
 												title="Sửa"> <i class="bi bi-pencil-square"></i>
-											</a> <a type="button" class="btn btn-sm btn-outline-danger"
-												href="${pageContext.request.contextPath}/admin/category/delete?id=${cat.id}"
+											</a>
+
+											<!-- Nút Xóa -->
+											<a href="${deleteUrl}" class="btn btn-outline-danger"
 												onclick="return confirm('Bạn có chắc muốn xóa danh mục: ${cat.name}?');"
 												title="Xóa"> <i class="bi bi-trash"></i>
 											</a>
 										</div>
 									</td>
+
 								</tr>
 							</c:forEach>
 						</tbody>

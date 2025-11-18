@@ -7,13 +7,13 @@ import vn.phuchau.modal.Category;
 public interface CategoryService {
 	void insert(Category category);
 
-	void edit(Category category);
+	void update(Category category);
 
 	void delete(int id);
 
-	Category get(int id);
+	Category findById(int id);
 
-	List<Category> getAll();
+	List<Category> findAll();
 
-	List<Category> search(String keyword);
+	List<Category> findName(String keyword);
 }
