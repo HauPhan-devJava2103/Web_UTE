@@ -1,6 +1,8 @@
 package vn.phuchau.modal;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Category implements Serializable {
 
@@ -12,6 +14,8 @@ public class Category implements Serializable {
 	private String name;
 	private String images;
 	private int status;
+
+	private List<Product> products = new ArrayList<>();
 
 	public Category(int id, String name, String images, int status) {
 		super();
@@ -57,9 +61,18 @@ public class Category implements Serializable {
 		this.status = status;
 	}
 
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", images=" + images + ", status=" + status + "]";
+		return "Category [id=" + id + ", name=" + name + ", images=" + images + ", status=" + status + ", products="
+				+ products + "]";
 	}
 
 }
